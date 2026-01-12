@@ -15,12 +15,7 @@ public class SpawnManager : MonoBehaviour
     public int maxSpawnCount;
     public int spawnCount = 0;
     public bool isAlive = false;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-    }
+    private bool isGameOver = false;
 
     // Update is called once per frame
     void Update()
@@ -40,8 +35,9 @@ public class SpawnManager : MonoBehaviour
             currentRb = currentSphere.GetComponent<Rigidbody>();
             currentRb.useGravity = false;
             isAlive = true;
-        } else if (spawnCount >= maxSpawnCount)
+        } else if (spawnCount >= maxSpawnCount && !isGameOver)
         {
+            isGameOver = true;
             gameManager.GameOver();
         }
             
@@ -65,6 +61,6 @@ public class SpawnManager : MonoBehaviour
 
     public void IncreaseSpawnCounter()
     {
-        spawnCount += 1;
+        spawnCount ++;
     }
 }
