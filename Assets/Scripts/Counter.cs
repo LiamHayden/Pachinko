@@ -20,11 +20,6 @@ public class Counter : MonoBehaviour
         scoreManager = FindAnyObjectByType<ScoreManager>();
     }
 
-    private void Update()
-    {
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         scoreManager.AddScore(Score);
