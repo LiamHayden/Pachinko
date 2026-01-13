@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject titleScreen;
 
     public TextMeshProUGUI finalScoreText;
+    public TMP_InputField playerNameInputField;
     public Button restartButton;
     public GameObject gameOverText;
     public GameObject score;
@@ -22,6 +23,11 @@ public class GameManager : MonoBehaviour
     private int highscore = -1;
     private int highscore2 = -1;
     private int highscore3 = -1;
+    public string playerName;
+    public string playerName2;
+    public string playerName3;
+
+    public string PlayerName { get; private set; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -67,25 +73,50 @@ public class GameManager : MonoBehaviour
 
     public void SaveGame()
     {
-        int hs1 = PlayerPrefs.GetInt("Highscore", 0);
-        int hs2 = PlayerPrefs.GetInt("Highscore2", 0);
-        int hs3 = PlayerPrefs.GetInt("Highscore3", 0);
+        if (finalScore > PlayerPrefs.GetInt("Highscore", 0))
+        {
+            // Save 2nd place to 3rd place
+            highscore3 = PlayerPrefs.GetInt("Highscore2", 0);
+            playerName3 = PlayerPrefs.GetString("PlayerName2", "No Name");
+            PlayerPrefs.SetInt("Highscore3", highscore3);
+            PlayerPrefs.SetString("PlayerName3", playerName3);
 
-        if (finalScore > hs1)
-        {
-            // Shift down
-            PlayerPrefs.SetInt("Highscore3", hs2);
-            PlayerPrefs.SetInt("Highscore2", hs1);
-            PlayerPrefs.SetInt("Highscore", finalScore);
+            // Save 1st place to 2nd place
+            highscore2 = PlayerPrefs.GetInt("Highscore", 0);
+            playerName2 = PlayerPrefs.GetString("PlayerName", "No Name");
+            PlayerPrefs.SetInt("Highscore2", highscore2);
+            PlayerPrefs.SetString("PlayerName2", playerName2);
+
+            // Save new 1st place
+            highscore = finalScore;
+            playerName = playerNameInputField.text;
+
+            PlayerPrefs.SetInt("Highscore", highscore);
+            PlayerPrefs.SetString("PlayerName", playerName);
         }
-        else if (finalScore > hs2)
+        else if (finalScore > PlayerPrefs.GetInt("Highscore2", 0))
         {
-            PlayerPrefs.SetInt("Highscore3", hs2);
-            PlayerPrefs.SetInt("Highscore2", finalScore);
+            // move current second place to 3rd place
+            highscore3 = PlayerPrefs.GetInt("Highscore2", 0);
+            playerName3 = PlayerPrefs.GetString("PlayerName2", "No Name");
+            PlayerPrefs.SetInt("Highscore3", highscore3);
+            PlayerPrefs.SetString("PlayerName3", playerName3);
+
+            // save new 2nd place
+            highscore2 = finalScore;
+            playerName2 = playerNameInputField.text;
+
+            PlayerPrefs.SetInt("Highscore2", highscore2);
+            PlayerPrefs.SetString("PlayerName2", playerName2);
         }
-        else if (finalScore > hs3)
+        else if (finalScore > PlayerPrefs.GetInt("Highscore3", 0))
         {
-            PlayerPrefs.SetInt("Highscore3", finalScore);
+            // save new 3rd place
+            highscore3 = finalScore;
+            playerName3 = playerNameInputField.text;
+
+            PlayerPrefs.SetInt("Highscore3", highscore3);
+            PlayerPrefs.SetString("PlayerName3", playerName3);
         }
 
         PlayerPrefs.Save();
