@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class GameManager : MonoBehaviour
 {
     private ScoreManager scoreManager;
@@ -23,9 +27,9 @@ public class GameManager : MonoBehaviour
     private int highscore = -1;
     private int highscore2 = -1;
     private int highscore3 = -1;
-    public string playerName;
-    public string playerName2;
-    public string playerName3;
+    private string playerName;
+    private string playerName2;
+    private string playerName3;
 
     public string PlayerName { get; private set; }
 
@@ -120,5 +124,14 @@ public class GameManager : MonoBehaviour
         }
 
         PlayerPrefs.Save();
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
     }
 }
